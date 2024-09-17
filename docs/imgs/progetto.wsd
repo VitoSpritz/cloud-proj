@@ -15,8 +15,8 @@ System_Boundary(authentication, "Authentication Server") {
     Container(OAuth, "Oauth", "Authentication server in grado di autenticare gli utenti")
 }
 
-System_Boundary(kafka, "Kafka") {
-    System(message, "Messaggistica", "Topic per la messaggistica in caso di modifica su contatto")
+System_Boundary(minio, "Minio") {
+    System(message, "Object Storage", "Obj storage per immagazzinare le immagini")
 }
 
 System_Ext(consumer, "Consumer")
