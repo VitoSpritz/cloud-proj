@@ -1,0 +1,57 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+' Definizione dei boundary e dei contenitori
+System_Boundary(contatti, "Contatti") {
+    Container(contatti_container, "Contatti Base Frontend", "Interfaccia utente per comunicare con il backend")
+    Container(contatti_logic, "Contatti Logic", "Logica del microservizio contatti e funzione di orchestrazione")
+}
+
+System_Boundary(database, "Database Postgres") {
+    System(postgres, "Postgres", "Schema contatti (con immagini blob?)")
+}
+
+System_Boundary(authentication, "Authentication Server") {
+    Container(OAuth, "Oauth", "Authentication server in grado di autenticare gli utenti")
+}
+
+System_Boundary(kafka, "Kafka") {
+    System(message, "Messaggistica", "Topic per la messaggistica in caso di modifica su contatto")
+}
+
+System_Ext(consumer, "Consumer")
+
+Rel(consumer, OAuth, "Authenticate")
+Rel(OAuth, contatti_container, "Authenticates", "JWT")
+
+
+Rel(contatti_container, contatti_logic, "Uses")
+Rel(contatti_logic, contatti_container, "Updates")
+Rel(contatti_logic, postgres, "Reads/Writes")
+
+Rel(contatti_logic, message, "Sends updates")
+
+System_Boundary(users, "Users") {
+ Person(admin, "Admin")
+ Person(user, "No privilege user")
+ Person(groupUser, "Group privilege user", "Many groups with different privileges")
+}
+
+Rel(OAuth, contatti_logic, "Updates", "JWT")
+Rel(contatti_logic, OAuth, "Checks", "JWT")
+
+skinparam linetype ortho
+skinparam rectangle {
+  BackgroundColor LightGray
+  BorderColor Black
+}
+skinparam person {
+  BackgroundColor LightBlue
+  BorderColor Black
+}
+skinparam note {
+  BackgroundColor LightYellow
+  BorderColor Black
+}
+skinparam ArrowColor black
+@enduml

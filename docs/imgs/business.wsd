@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+
+actor Guest as guest
+
+package Groups{
+  actor Admin as admin
+  actor "Group owner" as go
+  actor "Group subordinate" as gs
+}
+
+package Service {
+  usecase "Read only" as ro
+  usecase "Edit" as e
+  usecase "Change roles/images" as cr
+}
+
+guest --> ro
+admin --> e
+admin --> cr
+gs --> cr
+@enduml
