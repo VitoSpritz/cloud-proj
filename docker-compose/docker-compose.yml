@@ -1,13 +1,13 @@
 version: '3.7'
 
 services:
+
   postgres:
     image: postgres
     container_name: my_postgres
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: 'pass'
-      POSTGRES_DB: mydatabase
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     ports:
@@ -28,7 +28,21 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    container_name: keycloak
+    ports:
+      - "9180:8080"
+    command: "start-dev"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    networks:
+      - keycloak-network
+
 networks:
+  keycloak-network:
+    driver: bridge
   my-network:
     driver: bridge
 
