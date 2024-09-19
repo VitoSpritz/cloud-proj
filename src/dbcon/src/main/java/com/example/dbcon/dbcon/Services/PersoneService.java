@@ -27,4 +27,6 @@ public class PersoneService {
     public List<Persone> getPersoneByCity(String citta){
         return personeRepository.findByCity(citta);
     }
+
+    
 }
