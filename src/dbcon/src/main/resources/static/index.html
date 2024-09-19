@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabella delle Persone</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Elenco dei contatti</h2>
+<table id="persone-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Telefono</th>
+            <th>Città</th>
+            <th>Sesso</th>
+            <th>Gruppo</th>
+            <th>Mail</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<script>
+    async function fetchPersone() {
+        try {
+            const response = await fetch('http://localhost:8080/api/persone');
+            const persone = await response.json();
+            const tableBody = document.getElementById('persone-table').getElementsByTagName('tbody')[0];
+
+            tableBody.innerHTML = '';
+
+            persone.forEach(persona => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = persona.id;
+                row.insertCell(1).textContent = persona.nome;
+                row.insertCell(2).textContent = persona.cognome;
+                row.insertCell(3).textContent = persona.telefono;
+                row.insertCell(4).textContent = persona.citta;
+                row.insertCell(5).textContent = persona.sesso;
+                row.insertCell(6).textContent = persona.gruppo;
+                row.insertCell(7).textContent = persona.mail;
+            });
+        } catch (error) {
+            console.error('Errore nel recupero delle persone:', error);
+        }
+    }
+
+    window.onload = fetchPersone;
+</script>
+
+</body>
+</html>
