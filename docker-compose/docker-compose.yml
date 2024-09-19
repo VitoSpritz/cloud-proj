@@ -37,6 +37,8 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - keycloak-data:/opt/keycloak/data
     networks:
       - keycloak-network
 
@@ -47,5 +49,6 @@ networks:
     driver: bridge
 
 volumes:
+  keycloak-data:
   postgres-volume:
   pgadmin-data:
