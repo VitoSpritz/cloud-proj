@@ -29,7 +29,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.4
+    image: quay.io/keycloak/keycloak:25.0.0
     container_name: keycloak
     ports:
       - "9180:8080"
