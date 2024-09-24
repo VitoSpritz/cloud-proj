@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService implements NewUserService {
 
     private final Keycloak keycloak;
+
     @Value("${app.keycloak.realm}")
     private String realm;
 
@@ -31,21 +32,21 @@ public class UserService implements NewUserService {
         UserRepresentation userRepresentation = new UserRepresentation();
 
         userRepresentation.setEnabled(true);
-        userRepresentation.setFirstName((newUser.firsName()));
+        userRepresentation.setFirstName(newUser.firsName());
         userRepresentation.setLastName(newUser.lastName());
         userRepresentation.setUsername(newUser.username());
-        userRepresentation.setEmail(newUser.email());
+        userRepresentation.setEmail(newUser.username());
         userRepresentation.setEmailVerified(true);
 
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setValue(newUser.password());
-        credentialRepresentation.setType((CredentialRepresentation.PASSWORD));
+        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
 
         userRepresentation.setCredentials(List.of(credentialRepresentation));
 
         UsersResource userResource = getUsersResource();
 
-        Response response = ((UsersResource) userResource).create(userRepresentation);
+        Response response = userResource.create(userRepresentation);
 
         log.info("Status Code" + response.getStatus());
 

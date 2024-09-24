@@ -1,12 +1,15 @@
 package com.example.dbcon.dbcon.config;
 
+// import org.keycloak.authorization.client.util.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -44,6 +47,7 @@ public class SecurityConfig {
     }
     */
 
+    /*
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
@@ -71,6 +75,36 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
+    }*/
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+
+        return (web) -> {
+            web.ignoring().requestMatchers(
+                HttpMethod.POST,
+                "/public/**",
+                "/users"
+            );
+            web.ignoring().requestMatchers(
+
+                HttpMethod.GET,
+                "/public/**"
+            );
+            web.ignoring().requestMatchers(
+                HttpMethod.DELETE,
+                "/public/**"
+            );
+            web.ignoring().requestMatchers(
+                HttpMethod.PUT,
+                "/public/**"
+            );
+            web.ignoring().requestMatchers(
+                HttpMethod.OPTIONS,
+                "/**"
+            )
+            .requestMatchers("/configuration/**", "/swagger-ui/**");      
+        };
     }
 
 }

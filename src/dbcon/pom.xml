@@ -52,11 +52,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.keycloak</groupId>
 				<artifactId>keycloak-spring-boot-starter</artifactId>
 			<version>24.0.4</version>
-    	</dependency>
+    	</dependency>-->
 
 		<dependency>
 			<groupId>org.keycloak</groupId>
