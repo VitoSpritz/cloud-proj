@@ -5,11 +5,15 @@ import java.util.Objects;
 
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.GroupRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 
+import com.example.dbcon.dbcon.Services.Interfaces.NewUserService;
 import com.example.dbcon.dbcon.entities.NewUser;
 
 import jakarta.ws.rs.core.Response;
@@ -66,5 +70,29 @@ public class UserService implements NewUserService {
     public void sendVerificationEmail(String clientId) {
         UsersResource userResource = getUsersResource();
         userResource.get(clientId).sendVerifyEmail();
+    }
+
+    @Override
+    public void deleteUser(String clientId){
+        UsersResource userResource = getUsersResource();
+        userResource.delete(clientId);
+    }
+
+    @Override
+    public UserResource getUser(String userId) {
+        UsersResource userResource = getUsersResource();
+        return userResource.get(userId);
+    }
+
+    @Override
+    public List<RoleRepresentation> getUserRole(String userId) {
+
+        return getUser(userId).roles().realmLevel().listAll();
+    }
+
+    @Override
+    public List<GroupRepresentation> getUserGroup(String userId){
+
+        return getUser(userId).groups();
     }
 }

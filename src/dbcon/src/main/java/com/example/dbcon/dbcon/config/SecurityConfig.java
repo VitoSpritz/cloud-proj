@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthConverter jwtAuthConverter;
 
     /*
     @Bean
@@ -77,6 +76,8 @@ public class SecurityConfig {
         return http.build();
     }*/
 
+    private final JwtAuthConverter jwtAuthConverter;
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
 
@@ -93,7 +94,8 @@ public class SecurityConfig {
             );
             web.ignoring().requestMatchers(
                 HttpMethod.DELETE,
-                "/public/**"
+                "/public/**",
+                "/users/delete/{id}"
             );
             web.ignoring().requestMatchers(
                 HttpMethod.PUT,
@@ -105,6 +107,23 @@ public class SecurityConfig {
             )
             .requestMatchers("/configuration/**", "/swagger-ui/**");      
         };
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+
+        return httpSecurity
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest()
+                .authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthConverter)
+                )
+            )
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .build();
     }
 
 }

@@ -1,8 +1,9 @@
 package com.example.dbcon.dbcon.controllers;
 
 import org.apache.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,5 +36,24 @@ public class UserController {
         userService.sendVerificationEmail(id);
         return ResponseEntity.status(HttpStatus.SC_OK).build();
 
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
+
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.SC_NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/userRoles")
+    public ResponseEntity<?> getUserRoles(@PathVariable String id){
+
+        return ResponseEntity.status(HttpStatus.SC_OK).body(userService.getUserRole((id)));
+    }
+
+    @GetMapping("/{id}/userGroups")
+    public ResponseEntity<?> getUserGroups(@PathVariable String id){
+
+        return ResponseEntity.status(HttpStatus.SC_OK).body(userService.getUserGroup((id)));
     }
 }
