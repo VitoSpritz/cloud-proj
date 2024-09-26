@@ -4,18 +4,23 @@ import {keycloakService} from './services/keycloak'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import type { UserProfile } from './services/user-profile'
 
 const keycloak = keycloakService.keycloak;
+const _profile: UserProfile | undefined = undefined;
 
-keycloak.init({ onLoad: 'login-required' }).then((authenticated) => {
-    if (!authenticated) {
-        console.log('Non autenticato!');
+async function bootstrap() {
+    try {
+        await keycloakService.init();
+
+        const app = createApp(App);
+
+        app.use(router);
+
+        app.mount('#app');
+    } catch (error) {
+        console.error('Errore durante l\'inizializzazione dell\'applicazione', error);
     }
-    createApp(App)
-        .use(router)
-        .mount('#app');
+}
 
-    console.log('Utente autenticato con successo', keycloak.token);
-    }).catch((error) => {
-    console.error('Errore durante l\'inizializzazione di Keycloak', error);
-});
+bootstrap();

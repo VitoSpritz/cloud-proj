@@ -1,27 +1,26 @@
 package com.example.dbcon.dbcon.config;
 
-// import org.keycloak.authorization.client.util.Http;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.dbcon.dbcon.JwTConverter.JwtAuthConverter;
-import com.example.dbcon.dbcon.Log.JWTLogger;
-
 import lombok.RequiredArgsConstructor;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -78,7 +77,7 @@ public class SecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter;
 
-    @Bean
+    /*@Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
 
         return (web) -> {
@@ -107,13 +106,31 @@ public class SecurityConfig {
             )
             .requestMatchers("/configuration/**", "/swagger-ui/**");      
         };
-    }
+    }*/
+
+    private JwtFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
         return httpSecurity
-            .authorizeHttpRequests(auth -> auth
+            .cors(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> 
+                auth.requestMatchers(
+                    "/auth/**",
+                    "/v2/api-docs",
+                    "/v3/api-docs",
+                    "/v3/api-docs/**",
+                    "/swagger-resources/",
+                    "/swagger-resources/**",
+                    "/configuration/ui",
+                    "/configuration/security",
+                    "/swagger-ui/**",
+                    "/webjars/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 .anyRequest()
                 .authenticated()
             )
@@ -122,7 +139,9 @@ public class SecurityConfig {
                     .jwtAuthenticationConverter(jwtAuthConverter)
                 )
             )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
