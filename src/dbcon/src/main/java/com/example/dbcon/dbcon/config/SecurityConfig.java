@@ -108,7 +108,7 @@ public class SecurityConfig {
         };
     }*/
 
-    private JwtFilter jwtAuthFilter;
+    private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean

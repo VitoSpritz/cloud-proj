@@ -1,15 +1,18 @@
 package com.example.dbcon.dbcon.config;
 
 import java.util.*;
-import org.apache.commons.io.input.ObservableInputStream;
-import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.System;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.time.*;
+
+import java.security.Key;
+import java.util.function.*;
 
 @Service
 public class JwtService {
@@ -21,11 +24,31 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    private String generateToken(HashMap<String, Object> claims, UserDetails userDetails){
-        
+    public String generateToken(Map<String, Object> claims, UserDetails userDetails){
         return buildToken(claims, userDetails, jwtExpiration);
     }
 
+    public String exctractUsername(String token){
+        return extractClaims(token, io.jsonwebtoken.Claims::getSubject);
+    }
+
+    public <T> T extractClaims(String token, Function<Claims, T> claimResolver){
+        final Claims claims = extracAllClaims(token);
+        return claimResolver.apply(claims);
+    } 
+
+    @SuppressWarnings("deprecation")
+    private Claims extracAllClaims(String token){
+
+        return Jwts
+            .parser()
+            .setSigningKey(getSignInKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
+
+    @SuppressWarnings("deprecation")
     private String buildToken(Map<String, Object> claims, UserDetails userDetails, long jwtExpiration){
 
         var authorities = userDetails.getAuthorities()
@@ -39,14 +62,27 @@ public class JwtService {
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-            .claim("authrities", authorities)
-            .signWith(getSignInKey())
+            .claim("authorities", authorities)
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
 
     private Key getSignInKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token){
+        return extractClaims(token, Claims::getExpiration);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = exctractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token );
     }
 
 }
