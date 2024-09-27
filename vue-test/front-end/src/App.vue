@@ -1,33 +1,54 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { computed } from 'vue';
+import { keycloakService } from '@/services/keycloak';
+import { RouterLink, RouterView } from 'vue-router';
+
+const isAuthenticated = computed(() => keycloakService.keycloak?.authenticated);
 </script>
 
 <template>
-  
-  <div>
+  <div v-if="isAuthenticated">
     <button @click="logout">Logout</button>
+  </div>
+  <div v-else>
+    <button @click="login">Login</button>
+  </div>
+  <div>
+    <router-link to="/home" class="contact-link">Vai alla home</router-link>
+    <router-link to="/contatti" class="contact-link">Vai ai Contatti</router-link>
   </div>
   <RouterView />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {keycloakService} from '@/services/keycloak';
 
 export default defineComponent({
   name: 'App',
   methods: {
     async logout() {
       try {
-        await keycloakService.logout(); 
+        await keycloakService.logout();
         console.log('Logout effettuato con successo');
+        
+        await keycloakService.init();
       } catch (error) {
         console.error('Errore durante il logout:', error);
+      }
+    },
+    async login() {
+      try {
+        await keycloakService.login();
+        console.log('Login effettuato con successo');
+      } catch (error) {
+        console.error('Errore durante il login:', error);
       }
     },
   },
 });
 </script>
+
+<!--
 <style scoped>
 header {
   line-height: 1.5;
@@ -90,4 +111,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style> -->

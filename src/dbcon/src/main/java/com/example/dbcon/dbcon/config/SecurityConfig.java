@@ -8,7 +8,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import com.example.dbcon.dbcon.JwTConverter.JwtAuthConverter;
+import com.example.dbcon.dbcon.controllers.JwtLoggingFilter;
+
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 
 
@@ -18,14 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthConverter jwtAuthConverter;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
         return httpSecurity
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
+            .addFilterBefore(new JwtLoggingFilter(),UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> 
                 auth.requestMatchers(
                     "/auth/**",
@@ -38,19 +45,27 @@ public class SecurityConfig {
                     "/configuration/security",
                     "/swagger-ui/**",
                     "/webjars/**",
-                    "/swagger-ui.html"
-                    //"/api/persone"
+                    "/swagger-ui.html",
+                    "/home",
+                    "/"
                 ).permitAll()
                 .anyRequest()
                     .authenticated()
             )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(jwtAuthConverter)
-                )
-            )
-            .oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(jwtAuthConverter)))
+            .oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new JwtAuthConverter())))
             .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }

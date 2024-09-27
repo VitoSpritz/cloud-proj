@@ -1,4 +1,4 @@
-import Keycloak from 'keycloak-js'
+import Keycloak from 'keycloak-js';
 import type { UserProfile } from './user-profile';
 
 export class KeycloakService {
@@ -11,7 +11,7 @@ export class KeycloakService {
       this._keycloak = new Keycloak({
         url: 'http://localhost:9180',
         realm: 'Prova',
-        clientId: 'applicazione'
+        clientId: 'applicazione',
       });
     }
     return this._keycloak;
@@ -21,31 +21,52 @@ export class KeycloakService {
     return this._profile;
   }
 
-  get token(): String | undefined {
-    return this._profile?.token;
-  }
-
-  async init() {
+  async init(): Promise<void> {
     if (this._initialized) return;
 
-    const authenticated: boolean = await this.keycloak?.init({
-      onLoad: 'login-required'
-    });
+    try {
+      const authenticated: boolean = await this.keycloak?.init({
+        onLoad: 'login-required',
+        checkLoginIframe: false,
+      });
 
-    if (authenticated) {
-      this._profile = (await this.keycloak?.loadUserProfile() as UserProfile);
-      this._profile.token = this.keycloak?.token;
+      if (authenticated) {
+        this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
+        this._profile.token = this.keycloak?.token;
+      }
+    } catch (error) {
+      console.error('Errore durante l\'inizializzazione di Keycloak:', error);
     }
 
     this._initialized = true;
   }
 
-  login() {
-    return this.keycloak?.login();
+  async login(): Promise<void> {
+    try {
+      await this.keycloak?.login();
+    } catch (error) {
+      console.error('Errore durante il login:', error);
+    }
   }
 
-  logout() {
-    return this.keycloak?.logout({ redirectUri: "http://localhost:8081" });
+  async logout(): Promise<void> {
+    try {
+      await this.keycloak?.logout({ redirectUri: 'http://localhost:8081/home' });
+    } catch (error) {
+      console.error('Errore durante il logout:', error);
+    }
+  }
+
+  async isAuthenticated(): Promise<boolean> {
+    return this.keycloak?.authenticated || false;
+  }
+
+  async refreshToken(): Promise<void> {
+    try {
+      await this.keycloak?.updateToken(30);
+    } catch (error) {
+      console.error('Errore durante l\'aggiornamento del token:', error);
+    }
   }
 }
 

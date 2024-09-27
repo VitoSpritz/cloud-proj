@@ -21,7 +21,7 @@ public class BeansConfig {
     //private final UserDetailsService userDetailsService;
 
     @Bean
-    public AuditorAware<Integer> auditorAware() {
+    public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
     }
 

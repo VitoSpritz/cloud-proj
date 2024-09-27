@@ -2,7 +2,7 @@
 <template>
   <div>
     <h1>{{ greeting }}</h1>
-    <router-link to="/contatti" class="contact-link">Vai ai Contatti</router-link>
+    
   </div>
 </template>
   
@@ -40,8 +40,6 @@ export default defineComponent({
   },
 });
 </script>
-
-
   
 <style scoped>
 h1 {

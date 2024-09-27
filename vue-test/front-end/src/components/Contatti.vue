@@ -1,5 +1,4 @@
 <template>
-    <router-link to="/" class="contact-link">Vai alla Home</router-link>
     <h2>Contatti</h2>
     <h3>Tabella con i contatti</h3>
     
@@ -32,8 +31,6 @@
 
 <script lang="ts">
     import { defineComponent, ref, onMounted } from 'vue';
-    import { keycloakService } from '@/services/keycloak';
-    import apiService from '@/services/apiService';
     import type { Contatti } from '@/types/contatti';
     import http from '@/services/interceptor';
     
@@ -44,10 +41,10 @@
         
             onMounted(async () => {
                 try{
-                    const response = await http.get('/persone');
-                    people.value = response.data;
+                  const response = await http.get('/persone');
+                  people.value = response.data;
                 }catch (errror){
-                    console.error("Errore nel fetching")
+                  console.error("Errore nel fetching")
                 };
             });
         
