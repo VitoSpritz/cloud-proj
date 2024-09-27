@@ -4,10 +4,30 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   
-
+  <div>
+    <button @click="logout">Logout</button>
+  </div>
   <RouterView />
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue';
+import {keycloakService} from '@/services/keycloak';
+
+export default defineComponent({
+  name: 'App',
+  methods: {
+    async logout() {
+      try {
+        await keycloakService.logout(); 
+        console.log('Logout effettuato con successo');
+      } catch (error) {
+        console.error('Errore durante il logout:', error);
+      }
+    },
+  },
+});
+</script>
 <style scoped>
 header {
   line-height: 1.5;

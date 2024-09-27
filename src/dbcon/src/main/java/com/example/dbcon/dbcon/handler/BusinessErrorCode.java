@@ -1,14 +1,19 @@
 package com.example.dbcon.dbcon.handler;
 
-import org.apache.http.HttpStatus;
-
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 public enum BusinessErrorCode {
-
-    // NO_CODE(0, HttpStatus.SC_NOT_IMPLEMENTED, "No code"),
-    // ACCOUNT_LOCED(302, HttpStatus.SC_FORBIDDEN, "Account lcokde"),
-    // INCORRECT_CURRENT_PASSWORD(300, HttpStatus.SC_BAD_REQUEST, "Password is incorrect")
+    NO_CODE(0, NOT_IMPLEMENTED, "No code"),
+    INCORRECT_CURRENT_PASSWORD(300, BAD_REQUEST, "Current password is incorrect"),
+    NEW_PASSWORD_DOES_NOT_MATCH(301, BAD_REQUEST, "The new password does not match"),
+    ACCOUNT_LOCKED(302, FORBIDDEN, "User account is locked"),
+    ACCOUNT_DISABLED(303, FORBIDDEN, "User account is disabled"),
+    BAD_CREDENTIALS(304, FORBIDDEN, "Login and / or Password is incorrect"),
     ;
 
     @Getter
@@ -18,9 +23,9 @@ public enum BusinessErrorCode {
     @Getter
     private final HttpStatus httpStatus;
 
-    BusinessErrorCode(int code, HttpStatus httpStatus, String description){
+    BusinessErrorCode(int code, HttpStatus status, String description) {
         this.code = code;
-        this.httpStatus = httpStatus;
         this.description = description;
+        this.httpStatus = status;
     }
 }

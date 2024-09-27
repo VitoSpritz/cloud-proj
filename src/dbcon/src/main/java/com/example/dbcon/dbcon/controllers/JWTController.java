@@ -25,12 +25,6 @@ public class JWTController {
         return "Accesso riservato all'utente";
     }
 
-    @GetMapping("/sega")
-    @PreAuthorize("hasRole('sega')")
-    public String managerEndpoint() {
-        return "Accesso riservato al manager";
-    }
-
     @GetMapping("/token")
     public String getToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

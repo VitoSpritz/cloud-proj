@@ -14,9 +14,9 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.function.*;
 
-@Service
+//@Service
 public class JwtService {
-
+    /*
     private long jwtExpiration;
     private String secretKey;
 
@@ -83,6 +83,6 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = exctractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token );
-    }
+    }*/
 
 }
