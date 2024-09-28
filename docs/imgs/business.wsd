@@ -1,4 +1,4 @@
-@startuml
+@startuml business
 left to right direction
 
 actor Guest as guest

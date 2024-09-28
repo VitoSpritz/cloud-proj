@@ -1,4 +1,4 @@
-@startuml
+@startuml progetto
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 ' Definizione dei boundary e dei contenitori
@@ -8,7 +8,7 @@ System_Boundary(contatti, "Contatti") {
 }
 
 System_Boundary(database, "Database Postgres") {
-    System(postgres, "Postgres", "Schema contatti (con immagini blob?)")
+    System(postgres, "Postgres", "Schema dei contatti")
 }
 
 System_Boundary(authentication, "Authentication Server") {
@@ -21,7 +21,8 @@ System_Boundary(minio, "Minio") {
 
 System_Ext(consumer, "Consumer")
 
-Rel(consumer, OAuth, "Authenticate")
+Rel(contatti_container, OAuth, "Request Authentication")
+Rel(consumer, contatti_container, "Login Interface")
 Rel(OAuth, contatti_container, "Authenticates", "JWT")
 
 
