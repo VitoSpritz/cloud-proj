@@ -18,8 +18,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BeansConfig {
 
-    //private final UserDetailsService userDetailsService;
-
     @Bean
     public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
@@ -46,7 +44,5 @@ public class BeansConfig {
         ));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-
     }
-    
 }

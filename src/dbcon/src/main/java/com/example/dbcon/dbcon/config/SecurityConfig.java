@@ -19,7 +19,6 @@ import com.example.dbcon.dbcon.controllers.JwtLoggingFilter;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
