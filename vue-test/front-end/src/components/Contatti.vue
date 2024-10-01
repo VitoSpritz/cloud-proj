@@ -26,25 +26,32 @@
         </tr>
       </tbody>
     </table>
-    
 </template>
 
 <script lang="ts">
     import { defineComponent, ref, onMounted } from 'vue';
     import type { Contatti } from '@/types/contatti';
     import http from '@/services/interceptor';
-    
+
     export default defineComponent({
         name: 'Home',
         setup() {
             const people = ref<Contatti[]>([]);
-        
+
             onMounted(async () => {
                 try{
                   const response = await http.get('/persone');
                   people.value = response.data;
                 }catch (errror){
                   console.error("Errore nel fetching")
+                };
+
+                try {
+                  const response = await http.get('/test');
+                  const value = response.data;
+                  console.log(value);
+                } catch (error) {
+                  console.error("Errore durante il recupero dei ruoli:", error);
                 };
             });
         

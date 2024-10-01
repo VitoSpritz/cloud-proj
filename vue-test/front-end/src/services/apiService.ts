@@ -13,4 +13,13 @@ export default {
       throw error;
     }
   },
+  async getRoles(): Promise<String>{
+    try{
+      const response = await axios.get<String>('${API_URL}/roles/roles');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching people:', error);
+      throw error;
+    }
+  }
 };
