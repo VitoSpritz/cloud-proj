@@ -13,7 +13,7 @@ Di seguito riportato il diagramma della soluzione architetturale
 | **Contatti base** | È il componente per il frontend che restituirà i risultati delle chiamate al backend | Backend |
 | **Contatti logic** | È il componente di backend per la gestione dei servizi e orchestrazione delle chiamate | Nessuna |
 | **OAuth** | Authentication server che permette agli utenti di fare il login e poi di accedere a risorse specifiche | Nessuna |
-|  **Object Storage** |  Servizio che mantien le immagini e le restituisce su chiamata | Backend |
+|  **Object Storage** |  Servizio che mantiene le immagini e le restituisce su chiamata | Backend |
 
 ## Tecnologia e servizi
 

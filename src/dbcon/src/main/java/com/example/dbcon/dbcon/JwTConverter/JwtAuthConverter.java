@@ -46,7 +46,6 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         var resourceAccess = new HashMap<>(jwt.getClaim("resource_access"));
         logger.debug("Resource Access Claim: {}", resourceAccess);
         var eternal = (Map<String, List<String>>) resourceAccess.get("applicazione");
-        
 
         if(eternal == null){
             logger.warn("No resource roles found for 'applicazione'. Returning empty authorities.");
@@ -67,9 +66,6 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         var userGroups = jwt.getClaim("user_group_jwt");
 
         if (userGroups instanceof List<?>) {
-            logger.info("Sesso ananle" + ((List<?>) userGroups).stream()
-            .map(group -> new SimpleGrantedAuthority("GROUP_" + group.toString().replace("-", "_")))
-            .collect(Collectors.toSet()).toString());
             return ((List<?>) userGroups).stream()
                     .map(group -> new SimpleGrantedAuthority("GROUP_" + group.toString().replace("-", "_")))
                     .collect(Collectors.toSet());

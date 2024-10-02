@@ -29,8 +29,7 @@ public class PersoneService {
     }
 
     public Long insertPersone(PersonaRequest persona, Authentication connectedUser){
-        logger.info("Le credenziali sono :" + connectedUser.getCredentials());
-        logger.info("Princilas: " + connectedUser.getPrincipal());
+        
         Persone p = personeMapper.toPersona(persona);
         return personeRepository.save(p).getId();
     }

@@ -20,7 +20,7 @@ public class JwtLoggingFilter extends OncePerRequestFilter {
                     String token = authorizationHeader.substring(7); // Rimuovi "Bearer " dal token
         
                     // Logga il token JWT
-                    logger.info("Received JWT Token: {}", token);
+                    logger.info("TO REMOVE: Received JWT Token: {}", token);
                 }
         
                 // Continua con la catena di filtri

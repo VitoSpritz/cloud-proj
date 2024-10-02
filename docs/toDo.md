@@ -8,6 +8,7 @@
 - [X] Far comunicate Typescript con Spring
 - [ ] Pulire il codice
 - [ ] Far comunicare Minio con Spring
+- [ ] Da modificare il *business file* perchè outdated
 
 I jwt vengono gestiti da keycloak, generando un token su richiesta a login. Il frontend di login è sempre gestito dall'endpoint di keycloak, così come gli utenti che, a differenza di quanto detto durante l'ultimo incontro, non verranno più gestiti su DB ma da **keycloack** stesso.
 
