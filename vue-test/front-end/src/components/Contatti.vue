@@ -1,6 +1,8 @@
 <template>
     <h2>Contatti</h2>
     <h3>Tabella con i contatti</h3>
+
+    <router-link v-if="isAdmin" to="/crudcontatti" class="contact-link">Aggiungi un contatto</router-link>
     
     <table>
       <thead>
@@ -37,6 +39,7 @@
         name: 'Home',
         setup() {
             const people = ref<Contatti[]>([]);
+            const isAdmin = ref(false);
 
             onMounted(async () => {
                 try{
@@ -53,10 +56,18 @@
                 } catch (error) {
                   console.error("Errore durante il recupero dei ruoli:", error);
                 };
+
+                try{
+                  const response = await http.get('/hasRole');
+                  isAdmin.value = response.data;
+                }catch(error){
+                  console.error("L'utente non è admin:", error);
+                }
             });
         
             return {
                 people,
+                isAdmin,
             };
         },
     });
