@@ -30,4 +30,12 @@ public class PersoneService {
         return personeRepository.save(persona);
     }
 
+    public List<Persone> getPersoneByGroup(Authentication connectedUser, String group){
+        return personeRepository.GetPersoneByGroup(group);
+    }
+
+    public void editUserGroup(Long id, String group){
+        personeRepository.updateGruppoById(id, group);
+    }
+
 }

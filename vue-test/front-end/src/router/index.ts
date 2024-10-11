@@ -2,6 +2,7 @@ import App from '@/App.vue'
 import Contatti from '@/components/Contatti.vue'
 import Home from '@/components/Home.vue'
 import CRUD from '@/components/CRUDContatti.vue'
+import Edit from '@/components/EditContatti.vue'
 import { keycloakService } from '@/services/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -30,6 +31,12 @@ const router = createRouter({
       path: "/crudcontatti",
       name: 'CRUDContatti',
       component: CRUD,
+      meta: {requireAuth: true}
+    },
+    {
+      path: "/editcontatti",
+      name: 'EditContatti',
+      component: Edit,
       meta: {requireAuth: true}
     },
   ]

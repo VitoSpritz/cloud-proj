@@ -1,7 +1,6 @@
 package com.example.dbcon.dbcon.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import jakarta.validation.constraints.Email;

@@ -38,6 +38,7 @@
           <option disabled value="">Scegli...</option>
           <option value="IT">IT</option>
           <option value="Office">Office</option>
+          <option value="User">User</option>
         </select>
       </div>
       <div class="col-12">

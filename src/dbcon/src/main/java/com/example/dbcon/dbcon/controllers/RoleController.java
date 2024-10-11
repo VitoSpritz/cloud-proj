@@ -22,9 +22,15 @@ public class RoleController {
         return "Utente connesso allo route roles";
     }
 
-    @GetMapping("/hasRole")
+    @GetMapping("/isAdmin")
     @PreAuthorize("hasAuthority('GROUP_/Admins') and hasRole('client_admin')")
     public boolean isAdmin(Authentication connectedUser){
+        return true;
+    }
+
+    @GetMapping("/canEdit")
+    @PreAuthorize("hasAuthority('GROUP_/IT/Office')")
+    public boolean isEditor(Authentication connectedUser){
         return true;
     }
 }

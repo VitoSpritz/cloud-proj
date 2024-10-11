@@ -3,6 +3,7 @@
     <h3>Tabella con i contatti</h3>
 
     <router-link v-if="isAdmin" to="/crudcontatti" class="contact-link">Aggiungi un contatto</router-link>
+    <router-link v-if="canEdit" to="/editContatti" class="contact-link">Aggiorna un contatto</router-link>
     
     <table>
       <thead>
@@ -36,12 +37,28 @@
     import http from '@/services/interceptor';
 
     export default defineComponent({
-        name: 'Home',
+        name: 'Contatti',
         setup() {
             const people = ref<Contatti[]>([]);
             const isAdmin = ref(false);
+            const canEdit = ref(false);
 
             onMounted(async () => {
+
+                try{
+                  const response = await http.get('/isAdmin');
+                  isAdmin.value = response.data;
+                }catch(error){
+                  console.error("L'utente non è admin:");
+                };
+
+                try{
+                  const response = await http.get('/canEdit');
+                  canEdit.value = response.data;
+                } catch(error){
+                  console.error("L'utente non può editare:");
+                };
+
                 try{
                   const response = await http.get('/persone');
                   people.value = response.data;
@@ -49,25 +66,21 @@
                   console.error("Errore nel fetching")
                 };
 
-                try {
-                  const response = await http.get('/test');
-                  const value = response.data;
-                  console.log(value);
-                } catch (error) {
-                  console.error("Errore durante il recupero dei ruoli:", error);
+                if(isAdmin){
+                  try {
+                    const response = await http.get('/test');
+                    const value = response.data;
+                    console.log(value);
+                  } catch (error) {
+                    console.error("Errore durante il recupero dei ruoli:");
+                  };
                 };
-
-                try{
-                  const response = await http.get('/hasRole');
-                  isAdmin.value = response.data;
-                }catch(error){
-                  console.error("L'utente non è admin:", error);
-                }
             });
         
             return {
                 people,
                 isAdmin,
+                canEdit,
             };
         },
     });
