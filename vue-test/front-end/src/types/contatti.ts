@@ -7,4 +7,5 @@ export interface Contatti{
     sesso: string;
     gruppo: string;
     mail: string;
+    img: any;
 }
