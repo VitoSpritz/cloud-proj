@@ -12,9 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.dbcon.dbcon.entities.MinioDTO.PutObjectRequest;
-import com.example.dbcon.dbcon.entities.MinioDTO.GetObjectResponse;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -37,10 +34,8 @@ public class MinioController {
     @GetMapping("/images/user/{userId}")
     public ResponseEntity<byte[]> getImageByUserId(@PathVariable String userId) throws InvalidKeyException, NoSuchAlgorithmException, IllegalArgumentException, java.io.IOException {
         try {
-            // Supponiamo che il nome del file sia {userId}.jpeg
             String imageName = userId + ".jpeg";
             
-            // Ottenere l'immagine dal bucket
             InputStream stream = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(bucketName)
@@ -48,7 +43,6 @@ public class MinioController {
                             .build()
             );
             
-            // Lettura dell'immagine in byte array
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             byte[] data = new byte[1024];
             int bytesRead;
@@ -57,7 +51,6 @@ public class MinioController {
             }
             byte[] imageBytes = buffer.toByteArray();
 
-            // Impostare l'header del tipo di contenuto
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, "image/jpeg");
 
@@ -68,46 +61,29 @@ public class MinioController {
         }
     }
 
-    /*
-    @GetMapping("/listObjects")
-    public ResponseEntity<List<String>> listObjects(@RequestParam(required = false) String prefix) {
+    @PostMapping("/images/upload/{userId}")
+    public ResponseEntity<String> uploadImageWithUserId(@PathVariable String userId, @RequestParam("file") MultipartFile file) throws IllegalArgumentException, java.io.IOException {
         try {
-            List<String> objectNames = new ArrayList<>();
-            ListObjectsArgs args = ListObjectsArgs.builder().bucket(bucketName).prefix(prefix).build();
-            Iterable<Result<Item>> results = minioClient.listObjects(args);
-            for (Result<Item> result : results) {
-                objectNames.add(result.get().objectName());
-            }
-            return ResponseEntity.ok(objectNames);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            
+            String objectName = userId + ".jpeg";
+
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .stream(file.getInputStream(), file.getSize(), -1)
+                            .contentType("image/jpeg")
+                            .build()
+            );
+
+            return ResponseEntity.ok("Image uploaded successfully for user ID: " + userId);
+        } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | MinioException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
 
-    @GetMapping("/getObject")
-    public ResponseEntity<GetObjectResponse> getObject(@RequestParam String objectName) {
-
-
-        try (InputStream stream = minioClient.getObject(GetObjectArgs.builder()
-                .bucket(bucketName).object(objectName).build())) {
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            byte[] data = new byte[1024];
-            int bytesRead = 0;
-            while ((bytesRead = stream.read(data)) != -1) {
-                buffer.write(data, 0, bytesRead);
-            }
-
-            GetObjectResponse response = new GetObjectResponse();
-            response.setObjectName(objectName);
-            response.setContent(buffer.toByteArray());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
-        }
-    }
+    /*
 
     @PostMapping("/putObject")
     public ResponseEntity<String> putObject(@RequestBody PutObjectRequest request) {

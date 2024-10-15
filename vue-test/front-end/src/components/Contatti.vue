@@ -4,10 +4,10 @@
 
   <router-link v-if="isAdmin" to="/crudcontatti" class="contact-link">Aggiungi un contatto</router-link>
   <router-link v-if="canEdit" to="/editContatti" class="contact-link">Aggiorna un contatto</router-link>
-  
+
   <div>
     <input type="file" id="fileInput" @change="onFileSelected" />
-    <button @click="uploadFile">Carica File</button>
+    <button @click="uploadFile">Carica File Generale</button>
   </div>
 
   <table>
@@ -22,6 +22,7 @@
         <th>Sesso</th>
         <th>Gruppo</th>
         <th>Img</th>
+        <th>Upload Immagine</th>
       </tr>
     </thead>
     <tbody>
@@ -38,15 +39,20 @@
           <img :src="person.img" style="width: 50px; height: auto;" alt="User Image" v-if="person.img" />
           <span v-else>Immagine non disponibile</span>
         </td>
+        <td>
+          <input type="file" @change="onFileSelectedForUser($event, person.id)" />
+          <button @click="uploadFileForUser(person.id)">Carica Immagine</button>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 
+
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import type { Contatti } from '@/types/contatti';
-import http from '@/services/interceptor'; // Usa il tuo servizio HTTP personalizzato
+import http from '@/services/interceptor';
 
 export default defineComponent({
   name: 'Contatti',
@@ -54,9 +60,9 @@ export default defineComponent({
     const people = ref<Contatti[]>([]);
     const isAdmin = ref(false);
     const canEdit = ref(false);
-    const selectedFile = ref<File | null>(null); // Per il caricamento dei file
+    const selectedFile = ref<File | null>(null);
+    const userFileMap = ref<Record<number, File | null>>({});
 
-    // Funzione per caricare l'immagine selezionata
     const onFileSelected = (event: Event) => {
       const target = event.target as HTMLInputElement;
       if (target.files && target.files[0]) {
@@ -64,7 +70,13 @@ export default defineComponent({
       }
     };
 
-    // Funzione per caricare il file
+    const onFileSelectedForUser = (event: Event, userId: number) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        userFileMap.value[userId] = target.files[0];
+      }
+    };
+
     const uploadFile = async () => {
       if (selectedFile.value) {
         const formData = new FormData();
@@ -84,7 +96,31 @@ export default defineComponent({
       }
     };
 
-    // Funzione per ottenere l'URL dell'immagine per ciascun utente
+    const uploadFileForUser = async (userId: number) => {
+      const file = userFileMap.value[userId];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const response = await http.post(`/api/minio/images/upload/${userId}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          console.log(`File caricato con successo per l'utente ${userId}:`, response.data);
+          const imageUrl = await fetchUserImage(userId);
+          const person = people.value.find(p => p.id === userId);
+          if (person) {
+            person.img = imageUrl;
+          }
+        } catch (error) {
+          console.error(`Errore durante il caricamento del file per l'utente ${userId}:`, error);
+        }
+      } else {
+        console.error(`Nessun file selezionato per l'utente ${userId}.`);
+      }
+    };
+
     const fetchUserImage = async (userId: string | number) => {
       try {
         const response = await http.get(`minio/images/user/${userId}`, { responseType: 'blob' });
@@ -115,10 +151,9 @@ export default defineComponent({
         const responsePeople = await http.get('/persone');
         people.value = responsePeople.data;
 
-        // Per ogni persona, facciamo il fetch della rispettiva immagine
         for (const person of people.value) {
           const imageUrl = await fetchUserImage(person.id);
-          person.img = imageUrl; // Aggiungiamo il campo imageUrl dinamicamente
+          person.img = imageUrl;
         }
       } catch (error) {
         console.error("Errore nel fetching dei contatti:", error);
@@ -131,6 +166,8 @@ export default defineComponent({
       canEdit,
       onFileSelected,
       uploadFile,
+      onFileSelectedForUser,
+      uploadFileForUser,
       fetchUserImage
     };
   }
