@@ -3,23 +3,19 @@ package com.example.dbcon.dbcon.controllers;
 import io.jsonwebtoken.io.IOException;
 import io.minio.*;
 import io.minio.errors.MinioException;
-import io.minio.messages.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("api/minio")
@@ -62,6 +58,7 @@ public class MinioController {
     }
 
     @PostMapping("/images/upload/{userId}")
+    @PreAuthorize("hasAnyAuthority('GROUP_/Admins', 'GROUP_/IT', 'GROUP_/Users')")
     public ResponseEntity<String> uploadImageWithUserId(@PathVariable String userId, @RequestParam("file") MultipartFile file) throws IllegalArgumentException, java.io.IOException {
         try {
             
@@ -82,39 +79,4 @@ public class MinioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
-
-    /*
-
-    @PostMapping("/putObject")
-    public ResponseEntity<String> putObject(@RequestBody PutObjectRequest request) {
-
-        
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(request.getContent());
-            minioClient.putObject(PutObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(request.getObjectName())
-                    .stream(inputStream, request.getContent().length, -1)
-                    .contentType(request.getContentType())
-                    .build());
-            return ResponseEntity.ok("Object uploaded successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error uploading object: " + e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/removeObject")
-    public ResponseEntity<String> removeObject(@RequestParam String objectName) {
-        try {
-            minioClient.removeObject(RemoveObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectName)
-                    .build());
-            return ResponseEntity.ok("Object removed successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error removing object: " + e.getMessage());
-        }
-    }*/
 }
