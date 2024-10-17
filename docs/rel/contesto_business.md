@@ -9,5 +9,5 @@ Il sistema attuale in esecuzione può essere inquadrato all'iterno del seguente 
 In seguito a una analisi abbiamo identificato diversi ruoli interni con i propri casi d'uso e funzionalità.
 
 * **Admin**: ha il permesso di vedere e modifciare tutti i ruoli, contatti e immagini all'interno del servizio.
-* **Group owner**: ha il permesso di modificare e vedere solo i contatti all'interno del suo gruppo.
-* **Group subordinate**: subordinato al gruppo, può solo visualizzare ma non modiciare contatti all'interno del gruppo.
+* **IT Office**: ha il permesso di modificare alcune informazioni e vedere i contatti all'interno del suo gruppo. Può anche cambaire le imamgini.
+* **IT**: subordinato al gruppo, può solo visualizzare ma non modiciare contatti all'interno del gruppo.

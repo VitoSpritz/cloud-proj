@@ -1,0 +1,13 @@
+@startuml sequence
+Office -> Frontend: Calls the add image route
+Office -> Frontend: Inserts the image in the field
+Frontend -> Backend: Sends the image to the backend route
+activate Backend
+Backend -> Backend: Checks the image integrity
+Backend -> Frontend: Sends an error if there isn't any image or in wrong format
+Backend -> Minio: Send the image to the minio bucket
+Minio -> Minio: If new image name already exists overrides the old one
+Backend -> Frontend: Sends 200 OK
+deactivate Backend
+Frontend -> Office: Successfully saved the image
+@enduml

@@ -1,22 +1,26 @@
 @startuml business
 left to right direction
 
-actor Guest as guest
+actor User as guest
 
 package Groups{
-  actor Admin as admin
-  actor "Group owner" as go
-  actor "Group subordinate" as gs
+  actor "Admin" as admin
+  actor "Office" as off
+  actor "IT group" as gs
 }
 
 package Service {
   usecase "Read only" as ro
   usecase "Edit" as e
   usecase "Change roles/images" as cr
+  usecase "Add infos" as ai
 }
 
 guest --> ro
 admin --> e
 admin --> cr
-gs --> cr
+admin --> ai
+off --> cr
+off --> ai
+gs --> ai
 @enduml

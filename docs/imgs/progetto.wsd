@@ -1,4 +1,4 @@
-@startuml progetto
+@startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 ' Definizione dei boundary e dei contenitori
@@ -29,8 +29,10 @@ Rel(OAuth, contatti_container, "Authenticates", "JWT")
 Rel(contatti_container, contatti_logic, "Uses")
 Rel(contatti_logic, contatti_container, "Updates")
 Rel(contatti_logic, postgres, "Reads/Writes")
+Rel(postgres, contatti_logic, "Sends updates")
 
-Rel(contatti_logic, message, "Sends updates")
+Rel(contatti_logic, message, "Searches images")
+Rel(message, contatti_logic, "Sends images")
 
 System_Boundary(users, "Users") {
  Person(admin, "Admin")
