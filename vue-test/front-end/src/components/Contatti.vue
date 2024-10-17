@@ -89,7 +89,7 @@ export default defineComponent({
           });
           console.log('File caricato con successo:', response.data);
         } catch (error) {
-          console.error('Errore durante il caricamento del file:', error);
+          console.error('Errore durante il caricamento del file:');
         }
       } else {
         console.error('Nessun file selezionato.');
@@ -102,7 +102,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', file);
         try {
-          const response = await http.post(`/api/minio/images/upload/${userId}`, formData, {
+          const response = await http.post(`/minio/images/upload/${userId}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -127,7 +127,7 @@ export default defineComponent({
         const imageBlob = response.data;
         return URL.createObjectURL(imageBlob); // Creiamo un URL per visualizzare l'immagine
       } catch (error) {
-        console.error(`Errore durante il recupero dell'immagine per l'utente ${userId}:`, error);
+        console.error("Errore durante il recupero dell'immagine per l'utente ${userId}:");
         return null;
       }
     };
