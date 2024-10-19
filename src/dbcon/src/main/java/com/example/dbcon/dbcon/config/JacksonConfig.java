@@ -12,7 +12,6 @@ public class JacksonConfig {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        // Puoi registrare moduli personalizzati o configurare qui Jackson
         SimpleModule module = new SimpleModule();
         mapper.registerModule(module);
         return mapper;

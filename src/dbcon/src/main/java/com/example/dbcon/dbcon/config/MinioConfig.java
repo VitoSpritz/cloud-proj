@@ -26,7 +26,6 @@ public class MinioConfig {
                 .endpoint(minioUrl)
                 .credentials(accessKey, secretKey)
                 .build();
-                
     }
 
     @Bean

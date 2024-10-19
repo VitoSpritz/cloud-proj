@@ -21,8 +21,8 @@
         <th>Città</th>
         <th>Sesso</th>
         <th>Gruppo</th>
-        <th>Img</th>
-        <th>Upload Immagine</th>
+        <th v-if="!isUser">Img</th>
+        <th v-if="!isUser">Upload Immagine</th>
       </tr>
     </thead>
     <tbody>
@@ -35,11 +35,11 @@
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
-        <td>
-          <img :src="person.img" style="width: 50px; height: auto;" alt="User Image" v-if="person.img" />
+        <td v-if="!isUser">
+          <img :src="person.img" style="width: 100px; height: auto;" alt="User Image" v-if="person.img" />
           <span v-else>Immagine non disponibile</span>
         </td>
-        <td>
+        <td v-if="!isUser">
           <input type="file" @change="onFileSelectedForUser($event, person.id)" />
           <button @click="uploadFileForUser(person.id)">Carica Immagine</button>
         </td>
@@ -60,6 +60,7 @@ export default defineComponent({
     const people = ref<Contatti[]>([]);
     const isAdmin = ref(false);
     const canEdit = ref(false);
+    const isUser = ref(false);
     const selectedFile = ref<File | null>(null);
     const userFileMap = ref<Record<number, File | null>>({});
 
@@ -146,6 +147,13 @@ export default defineComponent({
       } catch (error) {
         console.error("L'utente non può editare:", error);
       }
+      
+      try {
+        const responseEdit = await http.get('/isUser');
+        isUser.value = responseEdit.data;
+      } catch (error) {
+        console.error("L'utente non è registrato:", error);
+      }
 
       try {
         const responsePeople = await http.get('/persone');
@@ -164,6 +172,7 @@ export default defineComponent({
       people,
       isAdmin,
       canEdit,
+      isUser,
       onFileSelected,
       uploadFile,
       onFileSelectedForUser,

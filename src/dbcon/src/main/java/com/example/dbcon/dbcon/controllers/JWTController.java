@@ -33,7 +33,6 @@ public class JWTController {
             Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
             return "JWT: " + jwt.getTokenValue();
         }
-
         return "No JWT available";
     }
     
