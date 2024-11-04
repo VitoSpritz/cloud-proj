@@ -7,5 +7,6 @@ Applicazione che permette di creare una rubrica digitale che gestisce le *entry*
 ## Problematiche
 
 * Gestione dei JWT
-* Gestione delle chiavi in locale?
-* Devo creare $N$ account e settarli da SpringBoot per far funzionare il tutto?
+* Gestione dei ruoli
+* Gestione degli accessi
+* Gestione delle immagini

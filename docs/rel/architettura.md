@@ -9,7 +9,7 @@ Di seguito riportato il diagramma della soluzione architetturale
 
 | Componente | Descrizione | Dipendenze |
 |---|---|---|
-| **Database contatti** | È il databse che conterrà i dati dei contatti | Nessuna |
+| **Database contatti** | È il database che conterrà i dati dei contatti | Nessuna |
 | **Contatti base** | È il componente per il frontend che restituirà i risultati delle chiamate al backend | Backend |
 | **Contatti logic** | È il componente di backend per la gestione dei servizi e orchestrazione delle chiamate | Nessuna |
 | **OAuth** | Authentication server che permette agli utenti di fare il login e poi di accedere a risorse specifiche | Nessuna |

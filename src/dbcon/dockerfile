@@ -1,0 +1,24 @@
+# Usa un'immagine di base per Java
+FROM openjdk:17-jdk-slim AS build
+
+# Imposta la cartella di lavoro
+WORKDIR /app
+
+# Copia il file pom.xml e le dipendenze
+COPY pom.xml ./
+COPY src ./src
+
+# Costruisci l'applicazione
+RUN ./mvnw package -DskipTests
+
+# Fase di produzione
+FROM openjdk:17-jdk-slim
+
+# Copia il jar generato dalla fase di build
+COPY --from=build /app/target/*.jar app.jar
+
+# Espone la porta su cui l'applicazione Spring Boot ascolta (di default 8080)
+EXPOSE 8080
+
+# Comando per avviare l'applicazione
+ENTRYPOINT ["java", "-jar", "app.jar"]
