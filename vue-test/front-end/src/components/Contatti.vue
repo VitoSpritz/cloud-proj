@@ -5,11 +5,6 @@
   <router-link v-if="isAdmin" to="/crudcontatti" class="contact-link">Aggiungi un contatto</router-link>
   <router-link v-if="canEdit" to="/editContatti" class="contact-link">Aggiorna un contatto</router-link>
 
-  <div>
-    <input type="file" id="fileInput" @change="onFileSelected" />
-    <button @click="uploadFile">Carica File Generale</button>
-  </div>
-
   <table>
     <thead>
       <tr>
@@ -35,11 +30,11 @@
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
-        <td v-if="!isUser">
+        <td>
           <img :src="person.img" style="width: 100px; height: auto;" alt="User Image" v-if="person.img" />
           <span v-else>Immagine non disponibile</span>
         </td>
-        <td v-if="!isUser">
+        <td v-if="canEdit || isAdmin">
           <input type="file" @change="onFileSelectedForUser($event, person.id)" />
           <button @click="uploadFileForUser(person.id)">Carica Immagine</button>
         </td>
