@@ -9,7 +9,7 @@ export class KeycloakService {
   get keycloak(): Keycloak {
     if (!this._keycloak) {
       this._keycloak = new Keycloak({
-        url: 'http://keycloak:9180',
+        url: 'http://localhost:9180',
         realm: 'Prova',
         clientId: 'applicazione',
       });
