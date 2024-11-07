@@ -67,6 +67,14 @@ services:
     networks:
       - my-network
 
+  frontend:
+    image: frontend:latest
+    container_name: frontend
+    ports:
+      - "8081:80"
+    networks:
+      - my-network
+
 networks:
   keycloak-network:
     driver: bridge

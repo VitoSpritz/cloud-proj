@@ -121,7 +121,7 @@ export default defineComponent({
       try {
         const response = await http.get(`minio/images/user/${userId}`, { responseType: 'blob' });
         const imageBlob = response.data;
-        return URL.createObjectURL(imageBlob); // Creiamo un URL per visualizzare l'immagine
+        return URL.createObjectURL(imageBlob);
       } catch (error) {
         console.error("Errore durante il recupero dell'immagine per l'utente ${userId}:");
         return null;
