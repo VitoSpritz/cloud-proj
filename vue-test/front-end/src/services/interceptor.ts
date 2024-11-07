@@ -3,7 +3,7 @@ import axios from 'axios';
 import { keycloakService } from '@/services/keycloak';
 
 const http = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://application:8080/api',
   timeout: 5000
 });
 

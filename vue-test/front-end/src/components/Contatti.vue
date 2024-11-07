@@ -35,11 +35,11 @@
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
-        <td v-if="!isUser">
+        <td>
           <img :src="person.img" style="width: 100px; height: auto;" alt="User Image" v-if="person.img" />
           <span v-else>Immagine non disponibile</span>
         </td>
-        <td v-if="!isUser">
+        <td v-if="canEdit || isAdmin">
           <input type="file" @change="onFileSelectedForUser($event, person.id)" />
           <button @click="uploadFileForUser(person.id)">Carica Immagine</button>
         </td>
@@ -126,7 +126,7 @@ export default defineComponent({
       try {
         const response = await http.get(`minio/images/user/${userId}`, { responseType: 'blob' });
         const imageBlob = response.data;
-        return URL.createObjectURL(imageBlob); // Creiamo un URL per visualizzare l'immagine
+        return URL.createObjectURL(imageBlob);
       } catch (error) {
         console.error("Errore durante il recupero dell'immagine per l'utente ${userId}:");
         return null;
