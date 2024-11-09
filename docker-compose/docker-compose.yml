@@ -63,7 +63,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://my_postgres:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/postgres
+      - OUTPUT_URL=http://localhost:8081
+      - APP_KEYCLOAK_SERVER_URL:http://localhost:9180
+      - APP_KEYCLOAK_REALM:http://localhost:9180/realms/Prova
+      - MINIO_URL:http://localhost:9000
     networks:
       - my-network
 
@@ -71,7 +75,7 @@ services:
     image: frontend:latest
     container_name: frontend
     ports:
-      - "8081:80"
+      - "8081:8081"
     networks:
       - my-network
 

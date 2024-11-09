@@ -48,6 +48,7 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import type { Contatti } from '@/types/contatti';
 import http from '@/services/interceptor';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Contatti',
@@ -130,7 +131,7 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        const responseAdmin = await http.get('/isAdmin');
+        const responseAdmin = await axios.get('http://localhost:8080/api/isAdmin');;
         isAdmin.value = responseAdmin.data;
       } catch (error) {
         console.error("L'utente non è admin:", error);

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { keycloakService } from '@/services/keycloak';
 
-const axiosInstance = axios.create();
+const axiosGuard = axios.create();
 
-axiosInstance.interceptors.request.use(
+axiosGuard.interceptors.request.use(
     async (config) => {
         const token = keycloakService.keycloak?.token;
 
@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-axiosInstance.interceptors.response.use(
+axiosGuard.interceptors.response.use(
     (response) => {
         return response;
     },
@@ -30,4 +30,4 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export default axiosInstance;
+export default axiosGuard;
