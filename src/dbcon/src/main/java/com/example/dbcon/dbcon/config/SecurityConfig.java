@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         
-        String outputUrl = System.getenv().getOrDefault("OUTPUT_URL", "http://frontend:8081");
+        String outputUrl = System.getenv().getOrDefault("OUTPUT_URL", "http://localhost:8081");
 
         CorsConfiguration configuration = new CorsConfiguration();
         
@@ -49,7 +50,7 @@ public class SecurityConfig {
         return httpSecurity
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .csrf(AbstractHttpConfigurer::disable)
-            .addFilterBefore(new JwtLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtLoggingFilter(), AbstractAuthenticationProcessingFilter.class)
             .authorizeHttpRequests(auth -> 
                 auth.requestMatchers(
                     "/auth/**",

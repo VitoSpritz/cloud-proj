@@ -63,10 +63,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/postgres
+      # - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/postgres
       - OUTPUT_URL=http://localhost:8081
-      - APP_KEYCLOAK_SERVER_URL:http://localhost:9180
-      - APP_KEYCLOAK_REALM:http://localhost:9180/realms/Prova
+      - APP_KEYCLOAK_SERVER_URL:http://keycloak:8080
+      - APP_KEYCLOAK_REALM:http://keycloak:8080/realms/Prova
       - MINIO_URL:http://localhost:9000
     networks:
       - my-network
@@ -80,8 +80,6 @@ services:
       - my-network
 
 networks:
-  keycloak-network:
-    driver: bridge
   my-network:
     driver: bridge
 
