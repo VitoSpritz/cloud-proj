@@ -24,7 +24,7 @@ public class RoleController {
 
     @GetMapping("/isUser")
     @PreAuthorize("hasAuthority('GROUP_/Users') or hasRole('client_user')")
-    public String getTesting(Authentication connectedUser){
-        return "Utente connesso allo route roles";
+    public boolean getTesting(Authentication connectedUser){
+        return true;
     }
 }
