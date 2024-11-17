@@ -68,6 +68,14 @@ services:
     networks:
       - my-network
 
+  frontend:
+    image: frontend:latest
+    container_name: frontend
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+
 networks:
   my-network:
     driver: bridge
