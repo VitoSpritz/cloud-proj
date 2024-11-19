@@ -62,6 +62,13 @@ services:
     container_name: application
     ports:
       - "8080:8080"
+    environment:
+      - CORS_ALLOWED_ORIGIN=http://localhost:8081
+      - SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres
+      - APP_KEYCLOAK_SERVERURL:http://keycloak:8080
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://localhost:9180/realms/Prova
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://keycloak:8080/realms/Prova/protocol/openid-connect/certs
+      - MINIO_URL:http://minio:9000
     depends_on:
       - keycloak
       - postgres
