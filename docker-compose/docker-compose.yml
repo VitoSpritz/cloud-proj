@@ -4,7 +4,7 @@ services:
 
   postgres:
     image: postgres
-    container_name: my_postgres
+    container_name: postgres
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: 'pass'
@@ -63,11 +63,15 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/postgres
-      - OUTPUT_URL=http://localhost:8081
-      - APP_KEYCLOAK_SERVER_URL:http://localhost:9180
-      - APP_KEYCLOAK_REALM:http://localhost:9180/realms/Prova
-      - MINIO_URL:http://localhost:9000
+      - CORS_ALLOWED_ORIGIN=http://localhost:8081
+      - SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres
+      - APP_KEYCLOAK_SERVERURL:http://keycloak:8080
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://localhost:9180/realms/Prova
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://keycloak:8080/realms/Prova/protocol/openid-connect/certs
+      - MINIO_URL:http://minio:9000
+    depends_on:
+      - keycloak
+      - postgres
     networks:
       - my-network
 
@@ -80,8 +84,6 @@ services:
       - my-network
 
 networks:
-  keycloak-network:
-    driver: bridge
   my-network:
     driver: bridge
 
@@ -90,4 +92,3 @@ volumes:
   postgres-volume:
   pgadmin-data:
   minio_data:
-

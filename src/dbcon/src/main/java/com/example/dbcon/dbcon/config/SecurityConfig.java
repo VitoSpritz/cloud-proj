@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -53,6 +53,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> 
                 auth.requestMatchers(
                     "/auth/**",
+                    "/realm/Prova/**",
                     "/v2/api-docs",
                     "/v3/api-docs",
                     "/v3/api-docs/**",
@@ -71,6 +72,5 @@ public class SecurityConfig {
             .oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new JwtAuthConverter())))
             .build();
     }
-
     
 }

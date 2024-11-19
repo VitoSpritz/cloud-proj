@@ -3,7 +3,7 @@
   <h3>Tabella con i contatti</h3>
 
   <router-link v-if="isAdmin" to="/crudcontatti" class="contact-link">Aggiungi un contatto</router-link>
-  <router-link v-if="canEdit" to="/editContatti" class="contact-link">Aggiorna un contatto</router-link>
+  <router-link v-if="canEdit || isAdmin" to="/editContatti" class="contact-link">Aggiorna un contatto</router-link>
 
   <table>
     <thead>
@@ -16,8 +16,8 @@
         <th>Città</th>
         <th>Sesso</th>
         <th>Gruppo</th>
-        <th v-if="!isUser">Img</th>
-        <th v-if="!isUser">Upload Immagine</th>
+        <th v-if="isAdmin || canEdit">Img</th>
+        <th v-if="isAdmin || canEdit">Upload Immagine</th>
       </tr>
     </thead>
     <tbody>
@@ -30,11 +30,11 @@
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
-        <td>
+        <td v-if="isAdmin || canEdit">
           <img :src="person.img" style="width: 100px; height: auto;" alt="User Image" v-if="person.img" />
           <span v-else>Immagine non disponibile</span>
         </td>
-        <td v-if="canEdit || isAdmin">
+        <td v-if="isAdmin || canEdit">
           <input type="file" @change="onFileSelectedForUser($event, person.id)" />
           <button @click="uploadFileForUser(person.id)">Carica Immagine</button>
         </td>
@@ -104,17 +104,17 @@ export default defineComponent({
               'Content-Type': 'multipart/form-data'
             }
           });
-          console.log(`File caricato con successo per l'utente ${userId}:`, response.data);
+          console.log(`File caricato con successo per l'utente ${userId}:`, response.data, userId);
           const imageUrl = await fetchUserImage(userId);
           const person = people.value.find(p => p.id === userId);
           if (person) {
             person.img = imageUrl;
           }
         } catch (error) {
-          console.error(`Errore durante il caricamento del file per l'utente ${userId}:`, error);
+          console.error(`Errore durante il caricamento del file per l'utente ${userId}:`, error, userId);
         }
       } else {
-        console.error(`Nessun file selezionato per l'utente ${userId}.`);
+        console.error(`Nessun file selezionato per l'utente ${userId}.`, userId);
       }
     };
 
