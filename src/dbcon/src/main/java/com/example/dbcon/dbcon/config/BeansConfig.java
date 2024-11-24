@@ -3,6 +3,7 @@ package com.example.dbcon.dbcon.config;
 import java.util.Arrays;
 import java.util.Collections;
 import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -23,12 +24,15 @@ public class BeansConfig {
         return new ApplicationAuditAware();
     }
 
+    @Value("${cors.allowed.origin}")
+    private String allowedOrigin;
+
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+        config.setAllowedOrigins(Collections.singletonList(allowedOrigin));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.ORIGIN,
                 HttpHeaders.CONTENT_TYPE,

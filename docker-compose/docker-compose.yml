@@ -62,6 +62,8 @@ services:
     container_name: application
     ports:
       - "8080:8080"
+    environment:
+      - CORS_ALLOWED_ORIGIN:http://localhost:8081
     depends_on:
       - keycloak
       - postgres

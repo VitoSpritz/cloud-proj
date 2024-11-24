@@ -22,11 +22,11 @@
     </thead>
     <tbody>
       <tr v-for="person in people" :key="person.id">
-        <td>{{ person.id }}</td>
+        <td v-if="isAdmin">{{ person.id }}</td>
         <td>{{ person.nome }}</td>
         <td>{{ person.cognome }}</td>
         <td>{{ person.mail }}</td>
-        <td>{{ person.telefono }}</td>
+        <td v-if="isAdmin || canEdit">{{ person.telefono }}</td>
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
