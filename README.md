@@ -1,5 +1,8 @@
-# Intro
+# Home
 
 Repository per il progetto di cloud su un applicativo Springboot.
 
-[Clicca qui per andare all'architettura](/docs/rel/architettura.md)
+* [Architettura](/docs/rel/architettura.md)
+* [Contesto business](/docs/rel/contesto_business.md)
+* [Flusso](/docs/rel/flow.md)
+* [Obbiettivi](/docs/rel/obbiettivi.md)
