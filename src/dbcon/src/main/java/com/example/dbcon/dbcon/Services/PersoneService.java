@@ -2,9 +2,6 @@ package com.example.dbcon.dbcon.Services;
 
 import java.util.List;
 
-import org.jboss.jandex.Main;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +13,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PersoneService {
-
-    private final static Logger logger = LoggerFactory.getLogger(Main.class);
     
     private final PersoneRepository personeRepository;
 
     public List<Persone> getAllPersone(Authentication connectedUser){
-        logger.info("Utente connesso:" + connectedUser.getCredentials());
         return personeRepository.findAll();
     }
 
@@ -32,6 +26,14 @@ public class PersoneService {
 
     public List<Persone> getPersoneByGroup(Authentication connectedUser, String group){
         return personeRepository.GetPersoneByGroup(group);
+    }
+
+    public List<Persone> getPeopleForIT(Authentication connectedUser){
+        return personeRepository.getPeopleForIT();
+    }
+
+    public List<Persone> getPeopleForOffice(Authentication connectedUser){
+        return personeRepository.GetPeopleForOffice();
     }
 
     public void editUserGroup(Long id, String group){

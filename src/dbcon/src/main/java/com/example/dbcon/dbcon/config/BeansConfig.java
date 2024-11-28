@@ -12,7 +12,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import com.example.dbcon.dbcon.auditAware.ApplicationAuditAware;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -23,7 +22,7 @@ public class BeansConfig {
     public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
     }
-
+    
     @Value("${cors.allowed.origin}")
     private String allowedOrigin;
 

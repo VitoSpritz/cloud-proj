@@ -5,8 +5,33 @@
     "description": "A description for 'jwt.auth.converter.resource-id'"
   },
   {
-    "name": "app.keycloak.serverUrl",
+    "name": "cors.allowed.origin",
     "type": "java.lang.String",
-    "description": "A description for 'app.keycloak.serverUrl'"
+    "description": "A description for 'cors.allowed.origin'"
+  },
+  {
+    "name": "minio.url",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.url'"
+  },
+  {
+    "name": "minio.access-key",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.access-key'"
+  },
+  {
+    "name": "minio.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.secret-key'"
+  },
+  {
+    "name": "minio.bucket-name",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.bucket-name'"
+  },
+  {
+    "name": "minio.bucket.region",
+    "type": "java.lang.String",
+    "description": "A description for 'minio.bucket.region'"
   }
 ]}

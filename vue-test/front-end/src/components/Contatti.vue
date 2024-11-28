@@ -8,7 +8,7 @@
   <table>
     <thead>
       <tr>
-        <th>Id</th>
+        <th v-if="isAdmin">Id</th>
         <th>Nome</th>
         <th>Cognome</th>
         <th>Email</th>
@@ -78,7 +78,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', selectedFile.value);
         try {
-          const response = await http.post('/upload', formData, {
+          const response = await http.put('/upload', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -98,7 +98,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', file);
         try {
-          const response = await http.post(`/minio/images/upload/${userId}`, formData, {
+          const response = await http.put(`/minio/images/upload/${userId}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -142,7 +142,7 @@ export default defineComponent({
       } catch (error) {
         console.error("L'utente non può editare:", error);
       }
-      
+
       try {
         const responseEdit = await http.get('/isUser');
         isUser.value = responseEdit.data;

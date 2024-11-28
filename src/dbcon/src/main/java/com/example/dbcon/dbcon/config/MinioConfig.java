@@ -20,16 +20,15 @@ public class MinioConfig {
     @Value("${minio.bucket-name}")
     private String bucketName;
 
+    @Value("${minio.bucket.region}")
+    private String bucketRegion;
+
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()
                 .endpoint(minioUrl)
                 .credentials(accessKey, secretKey)
+                .region(bucketRegion)
                 .build();
-    }
-
-    @Bean
-    public String defaultBucketName() {
-        return bucketName;
     }
 }

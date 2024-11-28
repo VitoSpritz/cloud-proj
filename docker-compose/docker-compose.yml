@@ -2,32 +2,6 @@ version: '3.7'
 
 services:
 
-  postgres:
-    image: postgres
-    container_name: postgres
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: 'pass'
-    volumes:
-      - postgres-volume:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - my-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "mail@mail.mail"
-      PGADMIN_DEFAULT_PASSWORD: "pass"
-    ports:
-      - "5050:80"
-    networks:
-      - my-network
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.0
     container_name: keycloak
@@ -41,32 +15,24 @@ services:
       - keycloak-data:/opt/keycloak/data
     networks:
       - my-network
-    
-  minio:
-    image: minio/minio:latest
-    container_name: minio
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio_data:/data 
-    command: server /data --console-address ":9001"
-    networks:
-      - my-network
 
   application:
-    image: dbcon-app:latest
+    image: vitospritz/dbcon-app:latest
     container_name: application
     ports:
       - "8080:8080"
     environment:
-      - CORS_ALLOWED_ORIGIN:http://localhost:8081
+      - CORS_ALLOWED_ORIGIN=http://localhost:8081
+      - S3_URL=https://imagesutenti.s3.pl-waw.scw.cloud
+      - S3_ACCESS_KEY=SCWCRDCB5D3YB12NR8QE
+      - S3_SECRET_KEY=45609f37-3e98-4485-a694-fcd89eb8aeea
+      - S3_NAME=imagesutenti
+      - S3_REGION=pl-waw
+      - DB_PASS=UzJj9MHZcn8XVYlF0AXKuPA
+      - DB_USERNAME=cloud
+      - DB_URL=jdbc:postgresql://test-cloud-5284.j77.aws-eu-central-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&password=zJj9MHZcn8XVYlF0AXKuPA&user=cloud
     depends_on:
       - keycloak
-      - postgres
     networks:
       - my-network
 
@@ -84,6 +50,3 @@ networks:
 
 volumes:
   keycloak-data:
-  postgres-volume:
-  pgadmin-data:
-  minio_data:
