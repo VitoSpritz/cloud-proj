@@ -1,0 +1,13 @@
+@startuml putImage
+
+User -> Frontend: Calls the Contatti route
+User -> Frontend: Selects a person and adds an image
+Frontend -> Backend: Calls the putImage API
+Backend -> Backend: Check the user authorization
+Backend -> Backend: Processes the user image
+Backend -> ObjectStorage: Puts the image in the bucket
+ObjectStorage -> Backend: 200 OK
+ObjectStorage -[#red]-> Backend: Error
+Backend -> Frontend: 200 OK
+Backend -[#red]-> Frontend: Error with the putImage endpoint
+Frontend -> User: Show the immage if OK

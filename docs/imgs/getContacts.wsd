@@ -1,18 +1,21 @@
-@startuml contacts
+@startuml getContacts
 User -> Frontend: Calls the frontend
 Frontend -> Backend: Requests contacts with bearer token inside
-activate Backend
+Backend -> AuthServer: Asks for the jwk
+AuthServer -> Backend: Request accepted
+Backend -> AuthServer: Downloads the jwk and stores it 
 
+activate Backend
 Backend -> Backend: Unapcks the JWT
-Backend -> AuthServer: Checks if the user exists
-AuthServer -> Backend: User exists
-AuthServer -> Backend: Abort if user doesn't exist
 Backend -> Backend: Checks user role and fetch the api
 Backend -> Postgres: Sends the query
+Postgres -> Backend: 200 OK
+Postgres -[#red]-> Backend: Error
 Postgres -> Backend: Sends the data
 Backend -> Frontend: Serves the api if authenticated
-Backend -> Frontend: Gives error if not authenticate to the api
+Backend -[#red]-> Frontend: Gives error if not authenticate to the api
 deactivate Backend
 
 Frontend -> User: Shows the filtered contacts based on the role
+Frontend -[#red]->  User: Doesn't load any contacts 
 @enduml

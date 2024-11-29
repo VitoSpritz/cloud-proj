@@ -1,21 +1,14 @@
 @startuml sequence
-User -> Frontend: Calls the frontend
 Frontend -> AuthServer: Requests the login page
 activate AuthServer
 AuthServer -> Frontend: Redirects to his own login page
 AuthServer -> AuthServer: Waits for the user to login/register
 AuthServer -> Frontend: Sends the Authentication and bearer
 deactivate AuthServer
-Backend -> AuthServer: Asks for the jwk
-AuthServer -> Backend: Request accepted
-Backend -> AuthServer: Downloads the jwk and stores it 
 Frontend -> Backend: Requests a service with bearer token in the header
 activate Backend
 Backend -> Backend: Unapcks the JWT
 Backend -> Backend: Checks user role and fetch the api
-Backend -> Frontend: Serves the api if authenticated
-Backend -[#red]-> Frontend: Gives error if not authenticate to the api
+Backend -> Frontend: Gives error if not authenticate to the api
 deactivate Backend
-Frontend -> User: Serves the backend response
-Frontend -[#red]->  User: Doesn't serve the backend response
 @enduml
