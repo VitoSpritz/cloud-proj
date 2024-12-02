@@ -36,8 +36,8 @@ public class PersoneService {
         return personeRepository.GetPeopleForOffice();
     }
 
-    public void editUserGroup(Long id, String group){
-        personeRepository.updateGruppoById(id, group);
+    public void editUserGroup(String nome, String cognome, String gruppo){
+        personeRepository.updateGruppoById(nome, cognome, gruppo);
     }
 
 }

@@ -1,7 +1,5 @@
 package com.example.dbcon.dbcon.config;
 
-import org.springframework.security.config.Customizer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,9 +35,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${cors.allowed.origin}")
-    private String allowedOrigin;
-
     @Bean
     public JwtDecoder jwtDecoder() throws Exception {
         InputStream is = getClass().getResourceAsStream("/certs.json");
@@ -60,47 +55,45 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
-            .cors(Customizer.withDefaults())
-            .csrf(AbstractHttpConfigurer::disable)
-            .addFilterBefore(new JwtLoggingFilter(),UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(auth -> 
-                auth.requestMatchers(
-                    "/auth/**",
-                    "/realm/Prova/**",
-                    "/v2/api-docs",
-                    "/v3/api-docs",
-                    "/v3/api-docs/**",
-                    "/swagger-resources/",
-                    "/swagger-resources/**",
-                    "/configuration/ui",
-                    "https://imagesutenti.s3.pl-waw.scw.cloud/*",
-                    "/configuration/security",
-                    "/swagger-ui/**",
-                    "/webjars/**",
-                    "/swagger-ui.html",
-                    "/home",
-                    "/"
-                ).permitAll()
-                .anyRequest()
-                    .authenticated()
-            )
-            .oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new JwtAuthConverter())))
-            .build();
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                        "/auth/**",
+                        "/realm/Prova/**",
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/swagger-ui.html",
+                        "/home",
+                        "/").permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .oauth2ResourceServer(
+                        auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new JwtAuthConverter())))
+                .build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigin));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }

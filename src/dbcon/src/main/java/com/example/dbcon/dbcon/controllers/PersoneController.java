@@ -45,13 +45,13 @@ public class PersoneController {
         return Collections.emptyList();
     }
 
-    @PutMapping("/editUser/{id}")
-    public ResponseEntity<String> updateGruppoUtente(@PathVariable Long id, @RequestBody String nuovoGruppo,
+    @PutMapping("/editUser/{nome}/{cognome}")
+    public ResponseEntity<String> updateGruppoUtente(@PathVariable String nome, @PathVariable String cognome, @RequestBody String nuovoGruppo,
             Authentication connectedUser) {
 
         try {
             nuovoGruppo = nuovoGruppo.replace("\"", "");
-            personeService.editUserGroup(id, nuovoGruppo);
+            personeService.editUserGroup(nome, cognome, nuovoGruppo);
             return ResponseEntity.ok("Gruppo aggiornato con successo");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

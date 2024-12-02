@@ -25,7 +25,7 @@ public interface PersoneRepository extends JpaRepository<Persone, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Persone p SET p.gruppo = :group WHERE p.id = :id")
-    int updateGruppoById(@Param("id")Long id, @Param("group") String group);
+    @Query("UPDATE Persone p SET p.gruppo = :group WHERE p.nome = :nome and p.cognome = :cognome")
+    int updateGruppoById(@Param("nome")String nome, @Param("cognome")String cognome, @Param("group") String group);
 
 }
