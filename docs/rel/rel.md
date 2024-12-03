@@ -2,7 +2,7 @@
 
 ## Impostazione princiaple
 
-Applicazione che permette di creare una rubrica digitale che gestisce le *entry* con tutte le informazioni del caso (nome, cognome, email, tel, ***gruppo***) e anche l'immagine profile (da stabilire se con obj storage o anche come blob all'interno del db, ma così bisognerà salvare i file in locale).
+Applicazione che permette di creare una rubrica digitale che gestisce le *entry* con tutte le informazioni del caso (nome, cognome, email, tel, ***gruppo***) e anche l'immagine profile.
 
 ## Problematiche
 

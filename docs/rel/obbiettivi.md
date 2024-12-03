@@ -5,5 +5,5 @@ Un'azienda IT desidera avere un applicativo che permetta la gestione di tutti gl
 ## Richieste del committente
 
 1. Utilizzare un approccio a microservizi.
-2. Utilizzare tecnologie cloud per sollevare le dipendenza dai servizi in locale
-3. Rendere l'applicativo scalabile all'aumentare delle richieste
+2. Utilizzare tecnologie cloud per sollevare le dipendenza dai servizi in locale.
+3. Rendere l'applicativo scalabile all'aumentare delle richieste.
