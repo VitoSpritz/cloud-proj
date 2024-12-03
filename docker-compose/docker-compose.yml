@@ -18,7 +18,7 @@ services:
 
   application:
     #image: vitospritz/dbcon-app:latest
-    image: dbcon-app
+    image: dbcon-app:latest
     container_name: application
     ports:
       - "8080:8080"

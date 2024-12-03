@@ -10,7 +10,6 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     const token = (keycloakService.profile?.token)?.trim();
-    console.log(token);
     
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
