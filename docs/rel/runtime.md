@@ -8,7 +8,7 @@ In questa sezione verranno riportate le viste più importanti dell'applicativo
 
 Analisi del metodo di **login** nell'applicativo:
 
-![Alt](/imgs/sequence.png)
+![Alt](../imgs/sequence.png)
 
 I sistemi conivolti in questa azione sono:
 
@@ -16,7 +16,7 @@ I sistemi conivolti in questa azione sono:
 * Backend / Orchestratore
 * Authentication Server
 
-Per ogni utente non registrato o con sessione attiva che richiede la *Home* route avviene un *redirect* all'endpoint di login/register fornita dall'Authentication server **Keycloak**. Una volta effettuato il login viene generato il *JWT* e inviato nella header della risposta. Questo verrà poi sempre trasportato nelle richieste utente fino a quando non effettuerà il logout, sempre gestito da un endpoint di Keycloak. Una volta uscito dalla pagina di login l'utente potrà scegliere su quale rotta andare. Ogni rotta però ha un *livello di accesso* che può bloccare o meno l'accesso. Qualora l'utente chiamasse una route collegata a backend, viene inserito il JWT nella richiesta a backend (Spring Boot) dove viene controllato il token e, se è appartenente al gruppo gli viene restitutita la pagina richiesta.
+Per ogni utente non registrato o senza sessione attiva che richiede la *Home* route avviene un *redirect* all'endpoint di login/register fornita dall'Authentication server **Keycloak**. Una volta effettuato il login viene generato il *JWT* e inviato nella header della risposta. Questo verrà poi sempre trasportato nelle richieste utente fino a quando non effettuerà il logout, sempre gestito da un endpoint di Keycloak. Una volta uscito dalla pagina di login l'utente potrà scegliere su quale rotta andare. Ogni rotta però ha un *livello di accesso* che può bloccare o meno l'accesso. Qualora l'utente chiamasse una route collegata a backend, viene inserito il JWT nella richiesta a backend (Spring Boot) dove viene controllato il token e, se è appartenente al gruppo gli viene restitutita la pagina richiesta.
 
 ***
 
