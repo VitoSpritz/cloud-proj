@@ -12,7 +12,7 @@
         <th>Nome</th>
         <th>Cognome</th>
         <th>Email</th>
-        <th>Telefono</th>
+        <th v-if="isAdmin || canEdit">Telefono</th>
         <th>Città</th>
         <th>Sesso</th>
         <th>Gruppo</th>
@@ -123,7 +123,7 @@ export default defineComponent({
         const imageBlob = response.data;
         return URL.createObjectURL(imageBlob);
       } catch (error) {
-        console.error("Errore durante il recupero dell'immagine per l'utente ${userId}:");
+        console.error(`Errore durante il recupero dell'immagine per l'utente ${userId}:`);
         return null;
       }
     };
