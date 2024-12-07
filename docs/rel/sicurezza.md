@@ -4,7 +4,7 @@ La gestione della sicurezza avviene tramite creazione e controllo dei token JWT 
 
 Qui riportato il diagramma dell'autenticazione dell'utente e della generazione del token:
 
-![Alt](/imgs/oauth.png)
+![Alt](/docs/imgs/oauth.png)
 
 I token vengono poi portati in tutte le richieste utetene e, una volta arrivati a backend vengono letti utilizzando la chiave pubblica richiesta tramite un endpoint di Keycloak.
 

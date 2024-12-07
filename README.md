@@ -10,4 +10,4 @@ Repository per il progetto di cloud su un applicativo Springboot.
 * [Requisiti](/docs/rel/requisiti.md)
 * [Sicurezza](/docs/rel/sicurezza.md)
 * [Flusso runtime](/docs/rel/runtime.md)
-* [Strategia](/rel/strategia.md)
+* [Strategia](/docs/rel/strategia.md)

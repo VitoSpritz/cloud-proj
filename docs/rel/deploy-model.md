@@ -10,4 +10,4 @@ Qui elencato il modello di deployment, con le specifiche di ogni componente del 
 
 * **Authentication Server** è il componente che permette l'accesso e autenticazione utente nell'applicativo. Questo è gestito in locale da un container *Keycloak*.
 
-* **Fronted** è il componente che gestisce la visualizzazione dell'applicativo e permette all'utente l'interazione con le sue funzionalità. Questo componente è dipendente dall'authentication provider, quindi è presente in locale.
+* **Fronted** è il componente che gestisce la visualizzazione dell'applicativo e permette all'utente l'interazione con le sue funzionalità. Questo componente è dipendente dall'authentication provider, quindi è presente in locale. L'immagine è disponibile su dockerhub all'[indirizzo](https://hub.docker.com/r/vitospritz/frontend).

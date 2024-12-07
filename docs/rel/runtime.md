@@ -24,7 +24,7 @@ Per ogni utente non registrato o senza sessione attiva che richiede la *Home* ro
 
 Analisi della route `getContacts`:
 
-![Alt](/imgs/getContacts.png)
+![Alt](/docs/imgs/getContacts.png)
 
 I sistemi conivolti in questa azione sono:
 
@@ -41,7 +41,7 @@ Quando un utente accede alla route `Contatti` viene fatta una chiamata in backgr
 
 Analisi della route `putImage`
 
-![Alt](/imgs/putImage.png)
+![Alt](/docs/imgs/putImage.png)
 
 I sistemi conivolti in questa azione sono:
 
