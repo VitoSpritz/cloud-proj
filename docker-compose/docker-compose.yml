@@ -1,33 +1,6 @@
-version: '3.7'
+version: "3.7"
 
 services:
-
-  postgres:
-    image: postgres
-    container_name: postgres
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: 'pass'
-    volumes:
-      - postgres-volume:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - my-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "mail@mail.mail"
-      PGADMIN_DEFAULT_PASSWORD: "pass"
-    ports:
-      - "5050:80"
-    networks:
-      - my-network
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.0
     container_name: keycloak
@@ -41,42 +14,9 @@ services:
       - keycloak-data:/opt/keycloak/data
     networks:
       - my-network
-    
-  minio:
-    image: minio/minio:latest
-    container_name: minio
-    environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio_data:/data 
-    command: server /data --console-address ":9001"
-    networks:
-      - my-network
-
-  application:
-    image: dbcon-app:latest
-    container_name: application
-    ports:
-      - "8080:8080"
-    environment:
-      - CORS_ALLOWED_ORIGIN=http://localhost:8081
-      - SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres
-      - APP_KEYCLOAK_SERVERURL:http://keycloak:8080
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://localhost:9180/realms/Prova
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://keycloak:8080/realms/Prova/protocol/openid-connect/certs
-      - MINIO_URL:http://minio:9000
-    depends_on:
-      - keycloak
-      - postgres
-    networks:
-      - my-network
 
   frontend:
-    image: frontend:latest
+    image: vitospritz/frontend:latest
     container_name: frontend
     ports:
       - "8081:8081"
@@ -89,6 +29,3 @@ networks:
 
 volumes:
   keycloak-data:
-  postgres-volume:
-  pgadmin-data:
-  minio_data:

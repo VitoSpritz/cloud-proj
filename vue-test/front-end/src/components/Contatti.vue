@@ -8,11 +8,11 @@
   <table>
     <thead>
       <tr>
-        <th>Id</th>
+        <th v-if="isAdmin">Id</th>
         <th>Nome</th>
         <th>Cognome</th>
         <th>Email</th>
-        <th>Telefono</th>
+        <th v-if="isAdmin || canEdit">Telefono</th>
         <th>Città</th>
         <th>Sesso</th>
         <th>Gruppo</th>
@@ -22,11 +22,11 @@
     </thead>
     <tbody>
       <tr v-for="person in people" :key="person.id">
-        <td>{{ person.id }}</td>
+        <td v-if="isAdmin">{{ person.id }}</td>
         <td>{{ person.nome }}</td>
         <td>{{ person.cognome }}</td>
         <td>{{ person.mail }}</td>
-        <td>{{ person.telefono }}</td>
+        <td v-if="isAdmin || canEdit">{{ person.telefono }}</td>
         <td>{{ person.citta }}</td>
         <td>{{ person.sesso }}</td>
         <td>{{ person.gruppo }}</td>
@@ -79,7 +79,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', selectedFile.value);
         try {
-          const response = await http.post('/upload', formData, {
+          const response = await http.put('/upload', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -99,7 +99,7 @@ export default defineComponent({
         const formData = new FormData();
         formData.append('file', file);
         try {
-          const response = await http.post(`/minio/images/upload/${userId}`, formData, {
+          const response = await http.put(`/minio/images/upload/${userId}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -124,7 +124,7 @@ export default defineComponent({
         const imageBlob = response.data;
         return URL.createObjectURL(imageBlob);
       } catch (error) {
-        console.error("Errore durante il recupero dell'immagine per l'utente ${userId}:");
+        console.error(`Errore durante il recupero dell'immagine per l'utente ${userId}:`);
         return null;
       }
     };
@@ -143,7 +143,7 @@ export default defineComponent({
       } catch (error) {
         console.error("L'utente non può editare:", error);
       }
-      
+
       try {
         const responseEdit = await http.get('/isUser');
         isUser.value = responseEdit.data;

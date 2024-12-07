@@ -54,7 +54,7 @@
 
                 try {
                     const group = selectedGroup.value
-                    const response = await http.put(`/editUser/${selectedUser.value.id}`, group);
+                    const response = await http.put(`/editUser/${selectedUser.value.nome}/${selectedUser.value.cognome}`, group);
                     console.log("Gruppo aggiornato con successo:", response.data);
                 } catch (error) {
                     console.error("Errore durante l'aggiornamento del gruppo:", error);

@@ -3,14 +3,13 @@ import axios from 'axios';
 import { keycloakService } from '@/services/keycloak';
 
 const http = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'https://giorgiovitosnojulv2-backend-application.functions.fnc.fr-par.scw.cloud/api',
   timeout: 5000
 });
 
 http.interceptors.request.use(
   (config) => {
     const token = (keycloakService.profile?.token)?.trim();
-    console.log(token);
     
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

@@ -77,7 +77,6 @@ export default defineComponent({
           sesso: this.sesso,
           gruppo: this.gruppo
         };
-        console.log(JSON.stringify(user));
         const response = await http.post('/insert', JSON.stringify(user));
         console.log('Utente registrato con successo', response.data);
       } catch (error) {

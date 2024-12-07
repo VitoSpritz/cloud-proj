@@ -27,6 +27,9 @@ public class MinioController {
     @Value("${minio.bucket-name}")
     private String bucketName;
 
+    @Value("${minio.url}")
+    private String minioUrl;
+
     @GetMapping("/images/user/{userId}")
     public ResponseEntity<byte[]> getImageByUserId(@PathVariable String userId) throws InvalidKeyException, NoSuchAlgorithmException, IllegalArgumentException, java.io.IOException {
         try {
@@ -34,9 +37,9 @@ public class MinioController {
             
             InputStream stream = minioClient.getObject(
                     GetObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(imageName)
-                            .build()
+                        .bucket(bucketName)
+                        .object(imageName)
+                        .build()
             );
             
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -61,9 +64,7 @@ public class MinioController {
     @PreAuthorize("hasAnyAuthority('GROUP_/Admins', 'GROUP_/IT', 'GROUP_/Users')")
     public ResponseEntity<String> uploadImageWithUserId(@PathVariable String userId, @RequestParam("file") MultipartFile file) throws IllegalArgumentException, java.io.IOException {
         try {
-            
             String objectName = userId + ".jpeg";
-
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
@@ -79,4 +80,5 @@ public class MinioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
+
 }

@@ -13,16 +13,19 @@ import com.example.dbcon.dbcon.entities.Persone;
 
 
 public interface PersoneRepository extends JpaRepository<Persone, Long> {
-    
-    /*@Query("SELECT p FROM Persone p WHERE p.citta = :citta")
-    PersonaResponse findByCity(String citta);*/
 
     @Query("SELECT p FROM Persone p WHERE p.gruppo = :group")
     List<Persone> GetPersoneByGroup(@Param("group") String group);
 
+    @Query("SELECT p FROM Persone p WHERE p.gruppo != 'Admin'")
+    List<Persone> GetPeopleForOffice();
+
+    @Query("SELECT p FROM Persone p WHERE p.gruppo NOT IN ('Admin', 'Office')")
+    List<Persone> getPeopleForIT();
+
     @Modifying
     @Transactional
-    @Query("UPDATE Persone p SET p.gruppo = :group WHERE p.id = :id")
-    int updateGruppoById(@Param("id")Long id, @Param("group") String group);
+    @Query("UPDATE Persone p SET p.gruppo = :group WHERE p.nome = :nome and p.cognome = :cognome")
+    int updateGruppoById(@Param("nome")String nome, @Param("cognome")String cognome, @Param("group") String group);
 
 }
