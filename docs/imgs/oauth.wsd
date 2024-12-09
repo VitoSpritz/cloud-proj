@@ -1,14 +1,14 @@
 @startuml oauth
-Frontend -> AuthServer: Requests the login page
-activate AuthServer
-AuthServer -> Frontend: Redirects to his own login page
-AuthServer -> AuthServer: Waits for the user to login/register
-AuthServer -> Frontend: Sends the Authentication and bearer
-deactivate AuthServer
+Frontend -> Keycloak: Requests the login page
+activate Keycloak
+Keycloak -> Frontend: Redirects to his own login page
+Keycloak -> Keycloak: Waits for the user to login/register
+Keycloak -> Frontend: Sends the Authentication and bearer
+deactivate Keycloak
 Frontend -> Backend: Requests a service with bearer token in the header
 activate Backend
-Backend -> AuthServer: Requests the public key
-AuthServer -> Backend: Gives the key
+Backend -> Keycloak: Requests the public key
+Keycloak -> Backend: Gives the key
 Backend -> Backend: Unapcks the JWT
 Backend -> Backend: Checks user role and fetch the api
 Backend -[#red]-> Frontend: Gives error if not authenticate to the api

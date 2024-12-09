@@ -11,3 +11,4 @@ In seguito a una analisi abbiamo identificato diversi ruoli interni con i propri
 * **Admin**: ha il permesso di vedere e modifciare tutti i ruoli, contatti e immagini all'interno del servizio.
 * **IT Office**: ha il permesso di modificare alcune informazioni dei contatti come gruppo di appartenenza e vedere tutti i contatti subordinati al suo gruppo. Può anche cambiare le immagini.
 * **IT**: subordinato al gruppo, può solo visualizzare ma non modiciare contatti all'interno del gruppo.
+* **User**: utente registrato nell'azienda ma senza permessi, come ad esempio un tecnico occasionale o un cliente.

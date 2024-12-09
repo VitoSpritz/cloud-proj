@@ -9,3 +9,5 @@ Qui riportato il diagramma dell'autenticazione dell'utente e della generazione d
 I token vengono poi portati in tutte le richieste utetene e, una volta arrivati a backend vengono letti utilizzando la chiave pubblica richiesta tramite un endpoint di Keycloak.
 
 All'interno del servizio di backend avviene l'*unpacking* del token dove vengono estratti i ruoli di ogni utente e poi in base alle loro autorizzazioni gli vengono servite le giuste risorse o rotte.
+
+Keycloak non ha nessun ruolo per il databse e l'object storage dato che per accedervi bisogna prima essere autenticati ed è quindi compito del backend controllare i permessi e accettare o meno l'utetne.
